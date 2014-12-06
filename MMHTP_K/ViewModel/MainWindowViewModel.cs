@@ -1,18 +1,44 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MMHTP_K.Model;
 
 namespace MMHTP_K.ViewModel
 {
     class MainWindowViewModel : ViewModelBase
     {
         private InputViewModel _inputViewModel;
+        private ObservableCollection<ResultData> _resultDatas;
 
         public InputViewModel InputViewModel
         {
             get { return _inputViewModel ?? (_inputViewModel = new InputViewModel()); }
+        }
+
+
+
+        public ObservableCollection<ResultData> ResultData
+        {
+            get
+            {
+                if (_resultDatas != null) return _resultDatas;
+                _resultDatas = InitialCollectionInitialization();
+                return _resultDatas;
+            }
+            set { _resultDatas = value; RaisePropertyChanged("ResultData"); }
+        }
+
+        private static ObservableCollection<Model.ResultData> InitialCollectionInitialization()
+        {
+            var coll = new ObservableCollection<ResultData>();
+            for (var i = 0.0; i < 10; i+=0.1)
+            {
+                coll.Add(new ResultData { Time = i, Concentration = Math.Sin(i) });
+            }
+            return coll;
         }
 
         #region OpenCommand
