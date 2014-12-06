@@ -101,6 +101,9 @@
                 <MenuItem Header="О программе" Click="About_OnClick"/>
                 <MenuItem Header="Помощь" Command="{Binding HelpCommand}"/>
             </MenuItem>
+            <MenuItem Header="ОКНО">
+                <MenuItem Header="Ввод данных" Click="InputWindowMenuItem_OnClick"/>
+            </MenuItem>
         </Menu>
 
         <chartingToolkit:Chart LegendTitle="Графики" HorizontalAlignment="Left" Height="297" Margin="24,60,0,0" Title="Зависимость концентрации" VerticalAlignment="Top" Width="429">

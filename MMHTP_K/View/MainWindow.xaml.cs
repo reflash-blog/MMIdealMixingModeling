@@ -29,6 +29,12 @@ namespace MMHTP_K.View
             flyout.IsOpen = !flyout.IsOpen;
         }
 
+
+        private void InputWindowMenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            ToggleFlyout(0);
+        }
+
         private void MainWindow_OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             ToggleFlyout(0);
@@ -36,8 +42,6 @@ namespace MMHTP_K.View
 
         private async void About_OnClick(object sender, RoutedEventArgs e)
         {
-            //MetroDialogOptions.ColorScheme = MetroDialogColorScheme.Accented;
-
             var mySettings = new MetroDialogSettings()
             {
                 AffirmativeButtonText = "ok",
@@ -56,11 +60,8 @@ namespace MMHTP_K.View
         private async void ShowSchemeDialog(object sender, RoutedEventArgs e)
         {
             this.MetroDialogOptions.ColorScheme = MetroDialogColorScheme.Accented;
-
             var dialog = (BaseMetroDialog)this.Resources["SchemeDialog"];
-
             await this.ShowMetroDialogAsync(dialog);
-            
         }
 
         private async void HideSchemeDialog(object sender, RoutedEventArgs e)
@@ -68,5 +69,6 @@ namespace MMHTP_K.View
             var dialog = (BaseMetroDialog)this.Resources["SchemeDialog"];
             await this.HideMetroDialogAsync(dialog);
         }
+
     }
 }
