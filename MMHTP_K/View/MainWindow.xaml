@@ -18,7 +18,7 @@
                                  Title="Модель идеального смешения"
                                  x:Name="SchemeDialog">
             <StackPanel>
-                <Image Source="images/cell1.png"/>
+                <Image Source="images/image001.gif"/>
                 <Button Margin="50,0,0,20" Style="{StaticResource AccentedSquareButtonStyle}" Height="40" Width="100" Content="OK" Click="HideSchemeDialog" HorizontalAlignment="Right" />
             </StackPanel>
 

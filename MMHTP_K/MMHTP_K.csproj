@@ -123,7 +123,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="View\images\image001.gif" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="View\images\w450h4001385925290Cloud.png" />
   </ItemGroup>
