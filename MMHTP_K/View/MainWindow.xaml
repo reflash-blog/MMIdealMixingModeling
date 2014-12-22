@@ -21,7 +21,15 @@
                 <Image Source="images/cell1.png"/>
                 <Button Margin="50,0,0,20" Style="{StaticResource AccentedSquareButtonStyle}" Height="40" Width="100" Content="OK" Click="HideSchemeDialog" HorizontalAlignment="Right" />
             </StackPanel>
-            
+
+        </dialogs:CustomDialog>
+        <dialogs:CustomDialog x:Key="HelpDialog"
+                                 Title="Помощь"
+                                 x:Name="HelpDialog">
+            <StackPanel>
+                <TextBlock Text="{Binding HelpText}" FontSize="15"/>
+            </StackPanel>
+
         </dialogs:CustomDialog>
     </Window.Resources>
     <controls:MetroWindow.Flyouts>
@@ -29,21 +37,22 @@
             <controls:Flyout AnimateOpacity="True" AnimateOnPositionChange="True" DataContext="{Binding InputViewModel}"  Header="Ввод данных"  Background="#91000000" Width="350">
                 <ListBox DataContext="{Binding InputData}" Background="Transparent">
                     <StackPanel Orientation="Horizontal" >
-                        <Label Content="C" Margin="0,10,0,10" />
-                        <TextBox  Text="{Binding C, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Margin="15,10,0,10" Width="150"/>
+                        <Label Content="R" Margin="0,10,0,10" />
+                        <TextBox  Text="{Binding R, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  Margin="15,10,0,10" Width="150"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" >
                         <Label Content="h" Margin="0,10,0,10" />
-                        <TextBox  Text="{Binding H, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Margin="15,10,0,10" Width="150"/>
+                        <TextBox  Text="{Binding H, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  Margin="15,10,0,10" Width="150"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <Label Content="L" Margin="0,10,0,10" />
-                        <TextBox  Text="{Binding L, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Margin="15,10,0,10" Width="150"/>
+                        <TextBox  Text="{Binding LStart, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  Margin="15,10,0,10" Width="50"/>
+                        <TextBox  Text="{Binding LEnd, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  Margin="15,10,0,10" Width="50"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                        <Label Content="k" Margin="0,10,0,10" />
-                        <TextBox  Text="{Binding K, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Margin="15,10,0,10" Width="150"/>
+                        <Label Content="n" Margin="0,10,0,10" />
+                        <TextBox  Text="{Binding N, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  Margin="15,10,0,10" Width="150"/>
                     </StackPanel>
                 </ListBox>
             </controls:Flyout>
@@ -93,6 +102,7 @@
         <Menu Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="761">
             <MenuItem Header="ФАЙЛ">
                 <MenuItem Header="Открыть" Command="{Binding OpenCommand}"/>
+                <MenuItem Header="Расчет" Command="{Binding CalcCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
                 <MenuItem Header="Сохранить" Command="{Binding SaveCommand}"/>
                 <MenuItem Header="Сохранить как..." Command="{Binding SaveAsCommand}"/>
                 <MenuItem Header="Закрыть" Click="Close_OnClick"/>
@@ -100,24 +110,30 @@
             <MenuItem Header="ПОМОЩЬ">
                 <MenuItem Header="О программе" Click="About_OnClick"/>
                 <MenuItem Header="Помощь" Command="{Binding HelpCommand}"/>
+                <MenuItem Header="Пример" Click="HelpExampleMenuItem_OnClick"/>
             </MenuItem>
             <MenuItem Header="ОКНО">
                 <MenuItem Header="Ввод данных" Click="InputWindowMenuItem_OnClick"/>
             </MenuItem>
         </Menu>
 
-        <chartingToolkit:Chart LegendTitle="Графики" HorizontalAlignment="Left" Height="297" Margin="24,60,0,0" Title="Зависимость концентрации" VerticalAlignment="Top" Width="429">
-            <chartingToolkit:LineSeries AnimationSequence="FirstToLast"  Title="" DependentValuePath="Concentration" IndependentValuePath="Time" ItemsSource="{Binding ResultData}" IsSelectionEnabled="True" IsManipulationEnabled="True"/>
+        <chartingToolkit:Chart DataContext="{Binding ResultData}" LegendTitle="Графики" HorizontalAlignment="Left" Margin="24,60,0,0" Title="" Width="429" Height="297" VerticalAlignment="Top">
+            <chartingToolkit:LineSeries AnimationSequence="FirstToLast"  Title="Performance" DependentValuePath="Performance" IndependentValuePath="Length" ItemsSource="{Binding ResultItems}" IsSelectionEnabled="True" IsManipulationEnabled="True"/>
+            <chartingToolkit:LineSeries AnimationSequence="FirstToLast"  Title="Volume" DependentValuePath="Volume" IndependentValuePath="Length" ItemsSource="{Binding ResultItems}" IsSelectionEnabled="True" IsManipulationEnabled="True"/>
         </chartingToolkit:Chart>
-        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding ResultData,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" CanUserAddRows="True" HorizontalAlignment="Left" Margin="479,60,0,0" VerticalAlignment="Top" Height="388" Width="243">
+        <DataGrid AutoGenerateColumns="False" DataContext="{Binding ResultData}" ItemsSource="{Binding ResultItems}" CanUserAddRows="True" Margin="479,60,39,30">
             <DataGrid.Columns>
-
-                <DataGridTextColumn Header="Время" Binding="{Binding Time,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="*" />
-
-                <DataGridTextColumn Header="Концентрация" Binding="{Binding Concentration,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="*" />
-
+                <DataGridTextColumn Header="Длина" Binding="{Binding Length}" Width="*" />
+                <DataGridTextColumn Header="Объем барабана" Binding="{Binding Volume}" Width="*" />
+                <DataGridTextColumn Header="Производительность" Binding="{Binding Performance}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
+        <Label Content="F" Margin="24,362,673,90" />
+        <TextBox DataContext="{Binding ResultData}" Text="{Binding SeparationFactor}" IsEnabled="False"  Margin="106,362,0,0" HorizontalAlignment="Left" Width="120" Height="26" VerticalAlignment="Top"/>
+        <ProgressBar Background="Transparent" 
+DockPanel.Dock="Bottom"
+IsIndeterminate="{Binding Runned}"
+Height="25" VerticalAlignment="Bottom"/>
     </Grid>
 
 </controls:MetroWindow>

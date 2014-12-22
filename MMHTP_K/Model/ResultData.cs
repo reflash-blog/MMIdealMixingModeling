@@ -1,8 +1,10 @@
-﻿namespace MMHTP_K.Model
+﻿using System.Collections.ObjectModel;
+
+namespace MMHTP_K.Model
 {
     public class ResultData
     {
-        public double Time { get; set; }
-        public double Concentration { get; set; }
+        public double SeparationFactor { get; set; }
+        public ObservableCollection<ResultItem> ResultItems { get; set; } 
     }
 }

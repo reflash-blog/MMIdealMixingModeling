@@ -1,11 +1,17 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using MMHTP_K.Model;
+using MMHTP_K.View.Helpers;
 using MMHTP_K.ViewModel;
+using Newtonsoft.Json;
 
 namespace MMHTP_K.View
 {
@@ -14,6 +20,7 @@ namespace MMHTP_K.View
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -71,6 +78,34 @@ namespace MMHTP_K.View
             var dialog = (BaseMetroDialog)this.Resources["SchemeDialog"];
             await this.HideMetroDialogAsync(dialog);
         }
+
+        private async void HelpExampleMenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.MetroDialogOptions.ColorScheme = MetroDialogColorScheme.Accented;
+            var mainWindowViewModel = this.DataContext as MainWindowViewModel;
+            if (mainWindowViewModel != null)
+                mainWindowViewModel.HelpText = "Для начала работы вы должны ввести данные";
+            var dialog = (BaseMetroDialog)this.Resources["HelpDialog"];
+            await this.ShowMetroDialogAsync(dialog);
+            await Task.Run(() => Thread.Sleep(2500));
+            await this.HideMetroDialogAsync(dialog);
+            await Helper.ShowFileMenu();
+            await Task.Run(() => Thread.Sleep(100));                                            // For Left click to be performed
+            if (mainWindowViewModel != null) 
+                mainWindowViewModel.HelpText = "Вы можете получить данные из файла";
+            await this.ShowMetroDialogAsync(dialog);
+            await Task.Run(() => Thread.Sleep(2500));
+            await this.HideMetroDialogAsync(dialog);
+            await Helper.ShowOpenFileMenu();
+            if (mainWindowViewModel != null)
+                mainWindowViewModel.HelpText = "Или ввести самостоятельно";
+            await this.ShowMetroDialogAsync(dialog);
+            await Task.Run(() => Thread.Sleep(2500));
+            await this.HideMetroDialogAsync(dialog);
+            await Helper.ShowInputFlyout();
+        }
+
+
 
     }
 }
